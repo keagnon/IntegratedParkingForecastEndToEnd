@@ -3,7 +3,7 @@
 # pylint: disable=missing-function-docstring
 # pylint: disable=wildcard-import
 # pylint: disable=W0614
-import configparser
+import os
 import requests
 import pandas as pd
 from azure_configuration import AzureConfiguration
@@ -64,11 +64,9 @@ if __name__ == '__main__':
     concatenated_df = pd.concat(list_dfs, ignore_index=True)
     print(concatenated_df)
 
-    config = configparser.ConfigParser()
-    config.read('configuration.ini')
-    azure_storage_connection_string = config['Azure']['storage_connection_string']
-    container_name = config['Azure']['container_name']
-    blob_name = config['Azure']['blob_name']
+    azure_storage_connection_string = os.environ.get('STORAGE_CONNECTION_STRING')
+    container_name = "rncpprojectcontainer"
+    blob_name = "velib_data_extract"
 
     # Create an instance of azure_config
     azure_config = AzureConfiguration(
@@ -78,4 +76,4 @@ if __name__ == '__main__':
     )
 
     # Push dataframe concatenation
-    azure_config.push_dataframe_to_blob(concatenated_df)
+    azure_config.load_dataframe(concatenated_df)

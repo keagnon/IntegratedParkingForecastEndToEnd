@@ -9,13 +9,10 @@ class AzureConfiguration:
         self.blob_name = blob_name
         self.blob_service_client = BlobServiceClient.from_connection_string(azure_storage_connection_string)
 
-    def push_dataframe_to_blob(self, dataframe):
+    def load_dataframe(self, dataframe):
+
         file_name = f"{self.blob_name}.csv"
-
-        # Convertir le DataFrame au format CSV
         csv_data = dataframe.to_csv(index=False)
-
-        # Convertir les données CSV en bytes
         data_bytes = csv_data.encode('utf-8')
 
         # Envoyer les données au blob
